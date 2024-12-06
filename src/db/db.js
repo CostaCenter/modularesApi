@@ -7,9 +7,9 @@ const modelProduct = require('./model/product');      // Producto
 const modelPhoto = require('./model/photoProduct');      // Photos
 
 
-const entorno = false;
+const entorno = true;
 
-let dburl = entorno ? 'postgresql://postgres:MgygdDzTUdTVrzBkshFFcttqwtvLVbhZ@autorack.proxy.rlwy.net:30386/railway' : 'postgres:postgres:123@localhost:5432/modulares';
+let dburl = entorno ? 'postgresql://postgres:IWBTuzBUWBIbJnoUQEOvQgCCPcZwmCXY@postgres.railway.internal:5432/railway' : 'postgres:postgres:123@localhost:5432/modulares';
 
 const sequelize = new Sequelize(dburl, {
     logging: false,
