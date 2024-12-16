@@ -1,5 +1,5 @@
 const express = require('express');
-const { category, product, media } = require('../db/db');
+const { category, product, media, subcategory } = require('../db/db');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const rounds = process.env.AUTH_ROUNDS || 10;
@@ -75,9 +75,9 @@ module.exports = {
         async newProduct(req,res){
             try{
                 // Recibimos datos por body
-                const { name, referencia, description, photo, categoryId } = req.body;
+                const { name, referencia, description, photo, categoryId, subcategoryId } = req.body;
                 // Validamos los parametros
-                if(!name || !referencia || !description || !photo || !categoryId) return res.status(501).json({msg: 'Los parametros no son validos'});
+                if(!name || !referencia || !description || !photo || !categoryId || !subcategoryId) return res.status(501).json({msg: 'Los parametros no son validos'});
                 // Caso contrario, avanzamos
                 
                 const createProduct = await product.create({
@@ -86,6 +86,7 @@ module.exports = {
                     description,
                     photo,
                     categoryId,
+                    subcategoryId,
                     state: 'Active'
                 }).catch(err => {
                     console.log(err);
@@ -259,7 +260,7 @@ module.exports = {
                 res.status(500).json({msg: 'Ha ocurrido un error en la principal.'});
             }
         },
-
+    
 
         // Mostramos todas la categorias
         async getAllCategory(req, res){
@@ -270,13 +271,10 @@ module.exports = {
                     where: {
                         state: 'active'
                     },
-                    include:{
-                        model: product,
-                        include: [{
-                            model: media
-                        }]
-                    },
-                    order:[['updatedAt', 'DESC'], [{model: product}, 'updatedAt', 'DESC']]
+                    include:[{
+                        model: subcategory
+                    }],
+                    order:[['updatedAt', 'DESC'], [{model: subcategory}, 'updatedAt', 'DESC']]
                 }).catch(err => {
                     console.log(err);
                     return null;
@@ -284,7 +282,7 @@ module.exports = {
 
                 if(!searchCategories || !searchCategories.length) return res.status(404).json({msg:'No hay resultados'});
 
-                // Caso contrario, avanzamos
+                // Caso contrario, avanzamos 
                 res.status(200).json(searchCategories);
             }catch(err){
                 console.log(err);
@@ -302,12 +300,15 @@ module.exports = {
                 
                 const searchCategory = await category.findOne({
                     where: {
-                        title: categoryId
+                        id: categoryId
                     },
                     include:[{
-                        model:product
+                        model:subcategory, 
+                        include:[{
+                            model: product
+                        }]
                     }],
-                    order:[['updatedAt', 'DESC'], [{model: product}, 'updatedAt', 'DESC']]
+                    order:[['updatedAt', 'DESC'], [{model: subcategory}, 'updatedAt', 'DESC']]
 
                 }).catch(err => {
                     console.log(err);
@@ -320,6 +321,94 @@ module.exports = {
             }catch(err){
                 console.log(err);
                 res.status(500).json({msg: 'Ha ocurrido un error en la principal'});
+            }
+        }, 
+        // --- SUB CATEGORIAS
+        async getSubCategory(req, res){
+            try{
+                // Recibimos categoria por ID
+                const { cat, sub } = req.params;
+
+                // Validamos que entre
+                if(!sub) return res.status(501).json({msg: 'Los parametros no son validos.'});
+
+                // Caso contrario, avanzamos...
+                const searchSub = await subcategory.findOne({
+                    where: {
+                        id: sub,
+                        categoryId: cat
+                    },
+                    include: [{model: category}, {
+                        model: product,
+                        include: [{
+                            model: media
+                        }]
+                    }]
+                    
+                }).catch(err => {
+                    console.log(err);
+                    return null; 
+                });
+                // Si no hay resultados. Not found!
+                if(!searchSub) return res.status(404).json({msg: 'No hemos encontrado esto.'});
+
+                // Avanzamos
+                res.status(200).json(searchSub);
+            }catch(err){
+                console.log(err);
+                res.status(500).json({msg: 'Ha ocurrido un error en la principal.'});
+            }
+        },
+        async UpdateNameSubcategory(req, res){
+            try{
+                // Recibimos valores por body
+                const { title, subcategoryId } = req.body;
+
+                //Validamos la entrada
+                if(!title | !subcategoryId) return res.status(501).json({msg: 'Los parametros no son validos.'});
+                // Caso contrario, avanzamos...
+                
+                const updateSub = await subcategory.update({
+                    title,
+                }, {
+                    where: {
+                        id: subcategoryId
+                    }
+                }).catch(err => {
+                    console.log(err);
+                    return null;
+                });
+
+                if(!updateSub) return res.status(502).json({msg: 'No hemos podido actualizar est0'});
+
+                // Caso contrario, enviamos respuesta
+                res.status(200).jso({msg: 'Actualizado con exito.'});
+            }catch(err){
+                console.log(err);
+                res.status(500).json({msg: 'Ha ocurrido un error en la principal'});
+            }
+        },
+        async NewSubCategory(req, res){
+            try{
+                const { name, categoryId } = req.body;
+                if(!name || !categoryId) return res.status(501).json({msg: 'Los parametros no son validos.'});
+
+
+                const addSubCategory = await subcategory.create({
+                    title: name,
+                    categoryId,
+                    state: 'active'
+                }).catch(err => {
+                    console.log(err);
+                    return null;
+                });
+
+                if(!addSubCategory) return res.status(502).json({msg: 'No hemos logrado crear esto.'});
+                // Caso contrario, avanzamos
+                res.status(201).json(addSubCategory);
+            }catch(err){
+                console.log(err);
+                res.status(500).jso({msg: 'Ha ocurrido un error en la principal.'});
             }
         }
 }

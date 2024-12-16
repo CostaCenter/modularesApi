@@ -3,7 +3,7 @@ const bodyParser = require('body-parser');
 const {Sequelize,  DataTypes, INTEGER } = require('sequelize');
 
 const {db, Op } = require('./src/db/db');
-const { newCategory, getCategoryById, getAllCategory, newProduct, updateProduct, getProductById, addPhoto, deletePhoto, UpdateCategory } = require('./src/controllers/category');
+const { newCategory, getCategoryById, getAllCategory, newProduct, updateProduct, getProductById, addPhoto, deletePhoto, UpdateCategory, NewSubCategory, getSubCategory } = require('./src/controllers/category');
 
 const app = express();
 app.use(express.json()); 
@@ -29,6 +29,7 @@ app.get('/', (req, res)  => {
 
 //POST
 app.post('/newCategory/', newCategory);
+app.post('/newSubcategory', NewSubCategory);
 app.post('/newProduct', newProduct);
 app.post('/addPhoto', addPhoto);
 // PUT
@@ -37,6 +38,8 @@ app.put('/update/category', UpdateCategory);
 // GET
 // Obtenemos categoria por ID
 app.get('/get/category/:categoryId', getCategoryById);
+app.get('/get/subcat/:cat/:sub', getSubCategory);
+
 //Obtenemos todas las categorias
 app.get('/get/category', getAllCategory);
 app.get('/get/category/:categoryId', getCategoryById);
