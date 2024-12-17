@@ -8,7 +8,7 @@ module.exports = sequelize => {
         },
         // Phone
         smallDescription:{
-            type: DataTypes.STRING
+            type: DataTypes.TEXT
         },
         // Email
         bigTitle:{
@@ -16,7 +16,7 @@ module.exports = sequelize => {
         },
         // Sector
         bigDescription: {
-            type: DataTypes.STRING
+            type: DataTypes.TEXT
         },
         // Wallpaper
         wallpaper:{

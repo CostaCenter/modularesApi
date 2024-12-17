@@ -10,7 +10,7 @@ const modelPhoto = require('./model/photoProduct');      // Photos
 
 const entorno = true;
 
-let dburl = entorno ? 'postgresql://postgres:OgUWjkbSRDUNPhiBXSzKwlDQItxYCBXg@autorack.proxy.rlwy.net:55155/railway' : 'postgres:postgres:123@localhost:5432/modulares';
+let dburl = entorno ? 'postgresql://postgres:XoDIdaQwtDCzjrjXXnoxCJkAIJqeYrEP@junction.proxy.rlwy.net:32956/railway' : 'postgres:postgres:123@localhost:5432/modulares';
  
 const sequelize = new Sequelize(dburl, {
     logging: false,
