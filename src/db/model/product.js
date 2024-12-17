@@ -12,7 +12,7 @@ module.exports = sequelize => {
         },
         // Email
         description:{
-            type: DataTypes.STRING
+            type: DataTypes.TEXT
         },
         // Sector
         photo: {
