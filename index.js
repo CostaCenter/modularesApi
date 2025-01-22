@@ -46,7 +46,7 @@ app.get('/get/category/:categoryId', getCategoryById);
 app.get('/get/product/:productId', getProductById)
  // REMOVE
 app.delete('/delete/imagen/:photoId', deletePhoto);
-app.delete('/delete/product/:photo', deleteProduct)
+app.delete('/delete/product/:productId', deleteProduct)
 app.delete('/delete/category/:categoryId', deleteCategory)
 
 
