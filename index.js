@@ -3,7 +3,7 @@ const bodyParser = require('body-parser');
 const {Sequelize,  DataTypes, INTEGER } = require('sequelize');
 
 const {db, Op } = require('./src/db/db');
-const { newCategory, getCategoryById, getAllCategory, newProduct, updateProduct, getProductById, addPhoto, deletePhoto, UpdateCategory, NewSubCategory, getSubCategory } = require('./src/controllers/category');
+const { newCategory, getCategoryById, getAllCategory, newProduct, updateProduct, getProductById, addPhoto, deletePhoto, UpdateCategory, NewSubCategory, getSubCategory, deleteProduct } = require('./src/controllers/category');
 
 const app = express();
 app.use(express.json()); 
@@ -46,7 +46,8 @@ app.get('/get/category/:categoryId', getCategoryById);
 app.get('/get/product/:productId', getProductById)
  // REMOVE
 app.delete('/delete/imagen/:photoId', deletePhoto);
-
+app.delete('/delete/product/:photo', deleteProduct)
+app.delete('/delete/category/:categoryId', deleteProduct)
 
 
 

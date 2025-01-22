@@ -7,6 +7,54 @@ const secrete = process.env.AUTH_SECRET || 'WithGod';
 const expires = process.env.AUTH_EXPIRES || "30d";
 
 module.exports = {
+         // Eliminar producto
+         async deleteCategory(req, res){
+            try{ 
+                // Recibimos datos por params
+                const { categoryId } = req.params;
+                // Validamos la entrada del parametro
+                if(!categoryId) return res.status(501).json({msg: 'Parametro invalido.'});
+                // Caso contrario, avanzamos
+                const deleteDestroy = await category.destroy({
+                    where: {
+                        id: categoryId
+                    }
+                }).catch(err => {
+                    console.log(err)
+                });
+                // Validamos la eliminacion
+                if(!deleteDestroy) return res.status(502).json({msg: 'Delete'});
+                // Caso contrario
+                res.status(200).json({msg: 'Eliminado con exito'});
+            }catch(err){
+                console.log(err);
+                res.status(500).json({msg: 'Ha ocurrido un error en la principal'});
+            }
+        },
+        // Eliminar producto
+        async deleteProduct(req, res){
+            try{ 
+                // Recibimos datos por params
+                const { productId } = req.params;
+                // Validamos la entrada del parametro
+                if(!productId) return res.status(501).json({msg: 'Parametro invalido.'});
+                // Caso contrario, avanzamos
+                const deleteDestroy = await product.destroy({
+                    where: {
+                        id: productId
+                    }
+                }).catch(err => {
+                    console.log(err)
+                });
+                // Validamos la eliminacion
+                if(!deleteDestroy) return res.status(502).json({msg: 'Delete'});
+                // Caso contrario
+                res.status(200).json({msg: 'Eliminado con exito'});
+            }catch(err){
+                console.log(err);
+                res.status(500).json({msg: 'Ha ocurrido un error en la principal'});
+            }
+        },
         // Remover photo
         async deletePhoto(req, res){
             try{
@@ -274,7 +322,7 @@ module.exports = {
                     include:[{
                         model: subcategory
                     }],
-                    order:[['updatedAt', 'DESC'], [{model: subcategory}, 'updatedAt', 'DESC']]
+                    order:[['updatedAt', 'DESC'], [{model: subcategory}, 'createdAt', 'ASC']]
                 }).catch(err => {
                     console.log(err);
                     return null;
