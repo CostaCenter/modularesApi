@@ -11,7 +11,7 @@ module.exports = {
          async deleteCategory(req, res){
             try{ 
                 // Recibimos datos por params
-                const { !categoryId } = req.params;
+                const { categoryId } = req.params;
                 // Validamos la entrada del parametro
                 if(!categoryId) return res.status(501).json({msg: 'Parametro invalido.'});
                 // Caso contrario, avanzamos
