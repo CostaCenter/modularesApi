@@ -391,7 +391,8 @@ module.exports = {
                         include: [{
                             model: media
                         }]
-                    }]
+                    }],
+                    order:[['createdAt', 'DESC'], [{model: product}, 'createdAt', 'ASC']]
                     
                 }).catch(err => {
                     console.log(err);
