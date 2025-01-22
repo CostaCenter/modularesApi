@@ -356,7 +356,7 @@ module.exports = {
                             model: product
                         }]
                     }],
-                    order:[['updatedAt', 'DESC'], [{model: subcategory}, 'createdAt', 'ASC'], [{model: product}, 'createdAt', 'ASC']]
+                    order:[['updatedAt', 'DESC'], [{model: subcategory}, 'createdAt', 'ASC'], [{model: subcategory}, {model: product}, 'createdAt', 'ASC']]
 
                 }).catch(err => {
                     console.log(err);
