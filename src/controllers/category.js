@@ -389,7 +389,7 @@ module.exports = {
                     include: [{model: category}, {
                         model: product,
                         include: [{
-                            model: media
+                            model: media 
                         }]
                     }],
                     order:[['createdAt', 'DESC'], [{model: product}, 'createdAt', 'ASC']]
