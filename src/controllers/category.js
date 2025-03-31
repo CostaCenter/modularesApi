@@ -348,7 +348,7 @@ module.exports = {
                 
                 const searchCategory = await category.findOne({
                     where: {
-                        id: categoryId
+                        title: categoryId
                     },
                     include:[{
                         model:subcategory, 
@@ -375,7 +375,7 @@ module.exports = {
         async getSubCategory(req, res){
             try{
                 // Recibimos categoria por ID
-                const { cat, sub } = req.params;
+                const { cat, sub } = req.params; 
 
                 // Validamos que entre
                 if(!sub) return res.status(501).json({msg: 'Los parametros no son validos.'});
@@ -383,7 +383,7 @@ module.exports = {
                 // Caso contrario, avanzamos...
                 const searchSub = await subcategory.findOne({
                     where: {
-                        id: sub,
+                        title: sub,
                         categoryId: cat
                     },
                     include: [{model: category}, {
